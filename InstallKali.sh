@@ -2,12 +2,13 @@
 folder=kali-fs
 if [ -d "$folder" ]; then
 	first=1
-	echo "skipping downloading"
+	echo "RootFS already downloaded."
 fi
 tarball="kali-rootfs.tar.gz"
 if [ "$first" != 1 ];then
 	if [ ! -f $tarball ]; then
-		echo "Download Rootfs, this may take a while base on your internet speed."
+		echo "This script will install Kali Linux in Termux."
+		echo "Downloading RootFS (~100Mb), this may take a while, depending on your internet speed."
 		case `dpkg --print-architecture` in
 		aarch64)
 			archurl="arm64" ;;
@@ -29,13 +30,13 @@ if [ "$first" != 1 ];then
 	cur=`pwd`
 	mkdir -p "$folder"
 	cd "$folder"
-	echo "Decompressing Rootfs, please be patient."
+	echo "Decompressing RootFS, please wait."
 	proot --link2symlink tar -xf ${cur}/${tarball}||:
 	cd "$cur"
 fi
 mkdir -p kali-binds
 bin=start-kali.sh
-echo "writing launch script"
+echo "Creating startup script."
 cat > $bin <<- EOM
 #!/bin/bash
 cd \$(dirname \$0)
@@ -72,10 +73,11 @@ else
 fi
 EOM
 
-echo "fixing shebang of $bin"
+echo "Fixing Shebang of ${bin}."
 termux-fix-shebang $bin
-echo "making $bin executable"
+echo "making $bin executable."
 chmod +x $bin
-echo "removing image for some space"
+echo "Removing RootFS image."
 rm $tarball
-echo "You can now launch Kali with the ./${bin} script"
+echo "Kali Linux was successfully installed!"
+echo "You can now launch it by executing ./${bin} command."
