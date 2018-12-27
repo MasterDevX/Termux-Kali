@@ -8,7 +8,7 @@ tarball="kali-rootfs.tar.gz"
 if [ "$first" != 1 ];then
 	if [ ! -f $tarball ]; then
 		echo "This script will install Kali Linux in Termux."
-		echo "Downloading RootFS (~100Mb), this may take a while, depending on your internet speed."
+		echo "Downloading RootFS (~70Mb), this may take a while, depending on your internet speed."
 		case `dpkg --print-architecture` in
 		aarch64)
 			archurl="arm64" ;;
@@ -75,7 +75,7 @@ EOM
 
 echo "Fixing Shebang of ${bin}."
 termux-fix-shebang $bin
-echo "making $bin executable."
+echo "Making $bin executable."
 chmod +x $bin
 echo "Removing RootFS image."
 rm $tarball
