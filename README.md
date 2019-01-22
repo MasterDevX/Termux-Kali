@@ -1,6 +1,6 @@
 # KaliTermux
 ### Info
-Install Kali Linux on Adnroid using Termux!
+Install Kali Linux on Android using Termux!
 
 The script was originally developed by <a href="https://github.com/EXALAB">EXALAB</a> for <a href="https://github.com/EXALAB/AnLinux-App">AnLinux</a> project.</br>
 This version of script is slightly modified.</br>
