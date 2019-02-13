@@ -1,14 +1,18 @@
 #!/data/data/com.termux/files/usr/bin/bash
-folder=kali-fs
-if [ -d "$folder" ]; then
+
+echo
+echo -e "\e[93mThis script will install Kali Linux in Termux."
+echo
+echo -e "\e[32m[*] \e[34mChecking for RootFS..."
+folder="kali-fs"
+if [ -d $folder ]; then
 	first=1
-	echo "RootFS already downloaded."
+	echo -e "\e[32m[*] \e[34mRootFS is already downloaded, skipping..."
 fi
 tarball="kali-rootfs.tar.gz"
 if [ "$first" != 1 ];then
 	if [ ! -f $tarball ]; then
-		echo "This script will install Kali Linux in Termux."
-		echo "Downloading RootFS (~70Mb), this may take a while, depending on your internet speed."
+		echo -e "\e[32m[*] \e[34mDetecting CPU architecture..."
 		case `dpkg --print-architecture` in
 		aarch64)
 			archurl="arm64" ;;
@@ -23,22 +27,24 @@ if [ "$first" != 1 ];then
 		x86)
 			archurl="i386" ;;
 		*)
-			echo "unknown architecture"; exit 1 ;;
+			echo; echo -e "\e[91mDetected unsupported CPU architecture!"; echo; exit ;;
 		esac
-		wget "https://raw.githubusercontent.com/EXALAB/AnLinux-Resources/master/Rootfs/Kali/${archurl}/kali-rootfs-${archurl}.tar.gz" -O $tarball
+		echo -e "\e[32m[*] \e[34mDownloading RootFS (~70Mb) for ${archurl}..."
+		wget "https://raw.githubusercontent.com/EXALAB/AnLinux-Resources/master/Rootfs/Kali/${archurl}/kali-rootfs-${archurl}.tar.gz" -O $tarball -q
 	fi
 	cur=`pwd`
 	mkdir -p "$folder"
 	cd "$folder"
-	echo "Decompressing RootFS, please wait."
+	echo -e "\e[32m[*] \e[34mDecompressing RootFS..."
 	proot --link2symlink tar -xf ${cur}/${tarball}||:
 	cd "$cur"
 fi
 mkdir -p kali-binds
-bin=start-kali.sh
-echo "Creating startup script."
+bin="start-kali.sh"
+echo -e "\e[32m[*] \e[34mCreating startup script..."
 cat > $bin <<- EOM
-#!/bin/bash
+#!/data/data/com.termux/files/usr/bin/bash
+
 cd \$(dirname \$0)
 ## unset LD_PRELOAD in case termux-exec is installed
 unset LD_PRELOAD
@@ -72,12 +78,12 @@ else
     \$command -c "\$com"
 fi
 EOM
-
-echo "Fixing Shebang of ${bin}."
+echo -e "\e[32m[*] \e[34mConfiguring Shebang..."
 termux-fix-shebang $bin
-echo "Making $bin executable."
+echo -e "\e[32m[*] \e[34mSetting execution permissions..."
 chmod +x $bin
-echo "Removing RootFS image."
-rm $tarball
-echo "Kali Linux was successfully installed!"
-echo "You can now launch it by executing ./${bin} command."
+echo -e "\e[32m[*] \e[34mRemoving RootFS image..."
+rm -rf $tarball
+echo
+echo -e "\e[32mKali Linux was successfully installed!\e[39m"
+echo -e "\e[32mYou can now launch it by executing ./${bin} command.\e[39m"
