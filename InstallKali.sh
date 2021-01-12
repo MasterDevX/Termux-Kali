@@ -9,7 +9,7 @@ if [ -d $folder ]; then
 	first=1
 	echo -e "\e[32m[*] \e[34mRootFS is already downloaded, skipping..."
 fi
-tarball="kali-rootfs.tar.gz"
+tarball="kali-rootfs.tar.xz"
 if [ "$first" != 1 ];then
 	if [ ! -f $tarball ]; then
 		echo -e "\e[32m[*] \e[34mDetecting CPU architecture..."
@@ -30,7 +30,7 @@ if [ "$first" != 1 ];then
 			echo; echo -e "\e[91mDetected unsupported CPU architecture!"; echo; exit ;;
 		esac
 		echo -e "\e[32m[*] \e[34mDownloading RootFS (~70Mb) for ${archurl}..."
-		wget "https://raw.githubusercontent.com/EXALAB/AnLinux-Resources/master/Rootfs/Kali/${archurl}/kali-rootfs-${archurl}.tar.gz" -O $tarball -q
+		wget "https://raw.githubusercontent.com/EXALAB/AnLinux-Resources/master/Rootfs/Kali/${archurl}/kali-rootfs-${archurl}.tar.xz" -O $tarball -q
 	fi
 	cur=`pwd`
 	mkdir -p "$folder"
