@@ -6,7 +6,8 @@ The script was originally developed by <a href="https://github.com/EXALAB">EXALA
 This version of script is slightly modified.</br>
 Differences from original:
 - Mounting internal storage (/sdcard) to root (/) is enabled by default
-- Improved Echo output
+- Improved output
+- Some improvements in code
 ### How to use
 Simply copy and paste this code to Termux command line to install Kali Linux:<br/>
 ```pkg install wget proot -y && wget https://raw.githubusercontent.com/MasterDevX/KaliTermux/master/InstallKali.sh && bash InstallKali.sh```
