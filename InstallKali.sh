@@ -6,14 +6,14 @@ echo
 echo -e "\e[32m[*] \e[34mChecking for RootFS..."
 folder="kali-fs"
 if [ -d $folder ]; then
-	first=1
-	echo -e "\e[32m[*] \e[34mRootFS is already downloaded, skipping..."
+	skip=1
+	echo -e "\e[32m[*] \e[34mRootFS is already downloaded, skipping download..."
 fi
 tarball="kali-rootfs.tar.xz"
-if [ "$first" != 1 ];then
+if [ "$skip" != 1 ]; then
 	if [ ! -f $tarball ]; then
 		echo -e "\e[32m[*] \e[34mDetecting CPU architecture..."
-		case `dpkg --print-architecture` in
+		case $(dpkg --print-architecture) in
 		aarch64)
 			archurl="arm64" ;;
 		arm)
@@ -27,16 +27,16 @@ if [ "$first" != 1 ];then
 		x86)
 			archurl="i386" ;;
 		*)
-			echo; echo -e "\e[91mDetected unsupported CPU architecture!"; echo; exit ;;
+			echo; echo -e "\e[91mDetected unsupported CPU architecture!"; echo; exit 1 ;;
 		esac
 		echo -e "\e[32m[*] \e[34mDownloading RootFS (~70Mb) for ${archurl}..."
 		wget "https://raw.githubusercontent.com/EXALAB/AnLinux-Resources/master/Rootfs/Kali/${archurl}/kali-rootfs-${archurl}.tar.xz" -O $tarball -q
 	fi
-	cur=`pwd`
+	cur=$(pwd)
 	mkdir -p "$folder"
 	cd "$folder"
 	echo -e "\e[32m[*] \e[34mDecompressing RootFS..."
-	proot --link2symlink tar -xf ${cur}/${tarball}||:
+	proot --link2symlink tar -xf ${cur}/${tarball} || (echo -e "\e[91mFailed to decompress RootFS!"; echo; exit 1)
 	cd "$cur"
 fi
 mkdir -p kali-binds
